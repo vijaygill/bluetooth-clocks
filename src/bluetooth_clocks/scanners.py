@@ -45,12 +45,12 @@ async def find_clock(address: str, scan_duration: float = 5.0) -> BluetoothClock
                 f"Device with address {address} recognized as {found_clock.DEVICE_TYPE}"
             )
 
-    scanner = BleakScanner(detection_callback=device_found)
-
-    _logger.info("Scanning for device...")
-    await scanner.start()
-    await asyncio.sleep(scan_duration)
-    await scanner.stop()
+    with BleakScanner(detection_callback=device_found) as scanner:
+        _logger.info("Scanning for device...")
+        
+        await scanner.start()
+        await asyncio.sleep(scan_duration)
+        await scanner.stop()
 
     return found_clock  # noqa: R504
 
